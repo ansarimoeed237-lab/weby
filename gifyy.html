@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pink & Black Theme - Birthday Surprise</title>
+    <style>
+        :root {
+            --accent-pink: #ff69b4;
+            --primary-pink: #ff2a85;
+            --bg-black: #0b0b0b;
+            --text-white: #ffffff;
+            --text-light-pink: #ffb6c1;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #050505;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .phone-container {
+            width: 390px;
+            height: 800px;
+            background-color: var(--bg-black);
+            border: 12px solid #222;
+            border-radius: 45px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(255, 42, 133, 0.3);
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .phone-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 130px;
+            height: 25px;
+            background-color: #222;
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+            z-index: 100;
+        }
+
+        .phone-screen {
+            flex: 1;
+            background: linear-gradient(180deg, var(--accent-pink) 0%, #2b0b1a 45%, var(--bg-black) 85%);
+            position: relative;
+            overflow: hidden;
+            padding-top: 25px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Verification Overlay */
+        .verification-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(11, 11, 11, 0.95);
+            backdrop-filter: blur(15px);
+            z-index: 200;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s ease;
+        }
+
+        .verification-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+            display: none;
+        }
+
+        /* Emoji Shower Container */
+        .emoji-shower-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 250;
+            overflow: hidden;
+        }
+
+        .falling-emoji {
+            position: absolute;
+            top: -40px;
+            font-size: 26px;
+            animation: fallEmoji 3s linear forwards;
+            user-select: none;
+        }
+
+        @keyframes fallEmoji {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(850px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Fireworks Container */
+        .fireworks-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 300;
+            overflow: hidden;
+        }
+
+        .firework-particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            animation: explode 1s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+            box-shadow: 0 0 8px currentColor;
+        }
+
+        @keyframes explode {
+            0% {
+                transform: translate(0, 0) scale(1.2);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(0.2);
+                opacity: 0;
+            }
+        }
+
+        /* Central Form Container */
+        .form-container {
+            position: relative;
+            width: 88%;
+            background: rgba(16, 16, 16, 0.92);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--primary-pink);
+            border-radius: 16px;
+            padding: 30px 20px;
+            box-shadow: 0 0 25px rgba(255, 42, 133, 0.5);
+            z-index: 20;
+            text-align: center;
+            transition: all 0.5s ease;
+        }
+
+        .quick-note {
+            color: var(--text-white);
+            font-size: 16px;
+            margin-bottom: 25px;
+            font-weight: 500;
+            text-shadow: 0 0 8px rgba(255, 42, 133, 0.6);
+        }
+
+        .choice-btn {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .yes-btn {
+            background-color: var(--primary-pink);
+            color: var(--text-white);
+            box-shadow: 0 0 12px rgba(255, 42, 133, 0.5);
+        }
+
+        .yes-btn:hover {
+            background-color: var(--accent-pink);
+            transform: translateY(-2px);
+            box-shadow: 0 0 16px rgba(255, 105, 180, 0.7);
+        }
+
+        .no-btn {
+            background-color: #1a1a1a;
+            color: var(--text-light-pink);
+            border: 1px solid #333;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Birthday Message Styling */
+        .birthday-title {
+            color: var(--primary-pink);
+            font-size: 22px;
+            font-weight: 900;
+            text-shadow: 0 0 10px var(--primary-pink);
+            margin-bottom: 15px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); opacity: 0.9; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.9; }
+        }
+
+        .birthday-paragraph {
+            color: var(--text-white);
+            font-size: 13.5px;
+            line-height: 1.5;
+            text-align: left;
+            max-height: 420px;
+            overflow-y: auto;
+            padding-right: 5px;
+            animation: fadeIn 1s ease forwards;
+        }
+
+        .birthday-paragraph::-webkit-scrollbar {
+            width: 3px;
+        }
+
+        .birthday-paragraph::-webkit-scrollbar-thumb {
+            background-color: var(--primary-pink);
+            border-radius: 3px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Hearts Container */
+        .hearts-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 60%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .heart {
+            position: absolute;
+            bottom: -20px;
+            width: 10px;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            transform: rotate(-45deg);
+            animation: floatUp 4s linear infinite;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+        }
+
+        .heart::before {
+            top: -5px;
+            left: 0;
+        }
+
+        .heart::after {
+            left: 5px;
+            top: 0;
+        }
+
+        .heart.red {
+            background-color: rgba(255, 20, 60, 0.9);
+        }
+
+        .heart.red::before,
+        .heart.red::after {
+            background-color: rgba(255, 20, 60, 0.9);
+        }
+
+        @keyframes floatUp {
+            0% {
+                bottom: 0px;
+                opacity: 0;
+                transform: translateX(0) rotate(-45deg) scale(0.5);
+            }
+            20% {
+                opacity: 1;
+            }
+            80% {
+                opacity: 0.8;
+            }
+            100% {
+                bottom: 380px;
+                opacity: 0;
+                transform: translateX(25px) rotate(-45deg) scale(1.1);
+            }
+        }
+
+        .heart:nth-child(1) { left: 10%; animation-duration: 3.2s; animation-delay: 0s; }
+        .heart:nth-child(2) { left: 20%; animation-duration: 4.5s; animation-delay: 1.2s; }
+        .heart:nth-child(3) { left: 35%; animation-duration: 3.8s; animation-delay: 0.5s; }
+        .heart:nth-child(4) { left: 45%; animation-duration: 5.0s; animation-delay: 2.1s; }
+        .heart:nth-child(5) { left: 60%; animation-duration: 3.5s; animation-delay: 0.8s; }
+        .heart:nth-child(6) { left: 70%; animation-duration: 4.2s; animation-delay: 1.7s; }
+        .heart:nth-child(7) { left: 82%; animation-duration: 4.0s; animation-delay: 2.5s; }
+        .heart:nth-child(8) { left: 90%; animation-duration: 3.1s; animation-delay: 1.0s; }
+        .heart:nth-child(9) { left: 28%; animation-duration: 4.8s; animation-delay: 0.3s; }
+        .heart:nth-child(10) { left: 52%; animation-duration: 3.6s; animation-delay: 1.5s; }
+        .heart:nth-child(11) { left: 75%; animation-duration: 4.1s; animation-delay: 0.7s; }
+        .heart:nth-child(12) { left: 15%; animation-duration: 3.9s; animation-delay: 2.0s; }
+    </style>
+</head>
+<body>
+
+    <div class="phone-container">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+            
+            <!-- Emoji Shower Container -->
+            <div class="emoji-shower-container" id="emojiShowerContainer"></div>
+
+            <!-- Fireworks Layer -->
+            <div class="fireworks-container" id="fireworksContainer"></div>
+
+            <!-- Age Verification Overlay -->
+            <div class="verification-overlay" id="verificationOverlay">
+                <div class="form-container" id="verificationCard">
+                    <p class="quick-note">are you sure maddy wifeyyy ??</p>
+                    <button type="button" class="choice-btn yes-btn" id="verifyYes">Yes</button>
+                    <button type="button" class="choice-btn no-btn" id="verifyNo">No</button>
+                </div>
+            </div>
+
+            <!-- Central Form Container (Main App) -->
+            <div class="form-container" id="mainFormContainer">
+                <p class="quick-note">will you accept my wishes ??</p>
+                <button type="button" class="choice-btn yes-btn" id="mainYesBtn">Yes</button>
+                <button type="button" class="choice-btn no-btn" id="noBtn">No</button>
+            </div>
+
+            <!-- Heart Shower Layer -->
+            <div class="hearts-container">
+                <div class="heart"></div>
+                <div class="heart red"></div>
+                <div class="heart"></div>
+                <div class="heart red"></div>
+                <div class="heart"></div>
+                <div class="heart red"></div>
+                <div class="heart"></div>
+                <div class="heart red"></div>
+                <div class="heart"></div>
+                <div class="heart red"></div>
+                <div class="heart"></div>
+                <div class="heart red"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Verification Modal Logic & Emoji Shower
+        const verificationOverlay = document.getElementById('verificationOverlay');
+        const verificationCard = document.getElementById('verificationCard');
+        const verifyYes = document.getElementById('verifyYes');
+        const verifyNo = document.getElementById('verifyNo');
+        const emojiShowerContainer = document.getElementById('emojiShowerContainer');
+
+        const yesEmojis = ['✨', '👀', '🫀'];
+        const noEmojis = ['❌', '🔒', '☠️'];
+
+        // Verification Yes Button Action
+        verifyYes.addEventListener('click', () => {
+            verifyYes.disabled = true;
+            verifyNo.disabled = true;
+
+            const startTime = Date.now();
+            const showerInterval = setInterval(() => {
+                if (Date.now() - startTime > 5000) {
+                    clearInterval(showerInterval);
+                    return;
+                }
+
+                const emojiEl = document.createElement('div');
+                emojiEl.classList.add('falling-emoji');
+                emojiEl.textContent = yesEmojis[Math.floor(Math.random() * yesEmojis.length)];
+                emojiEl.style.left = Math.random() * 90 + 5 + '%';
+                emojiEl.style.animationDuration = (Math.random() * 1.5 + 2) + 's';
+                emojiShowerContainer.appendChild(emojiEl);
+
+                setTimeout(() => {
+                    emojiEl.remove();
+                }, 3500);
+            }, 120);
+
+            setTimeout(() => {
+                verificationOverlay.classList.add('hidden');
+            }, 5000);
+        });
+
+        // Verification No Button Action
+        verifyNo.addEventListener('click', () => {
+            verifyYes.disabled = true;
+            verifyNo.disabled = true;
+
+            const startTime = Date.now();
+            const showerInterval = setInterval(() => {
+                if (Date.now() - startTime > 5000) {
+                    clearInterval(showerInterval);
+                    return;
+                }
+
+                const emojiEl = document.createElement('div');
+                emojiEl.classList.add('falling-emoji');
+                emojiEl.textContent = noEmojis[Math.floor(Math.random() * noEmojis.length)];
+                emojiEl.style.left = Math.random() * 90 + 5 + '%';
+                emojiEl.style.animationDuration = (Math.random() * 1.5 + 2) + 's';
+                emojiShowerContainer.appendChild(emojiEl);
+
+                setTimeout(() => {
+                    emojiEl.remove();
+                }, 3500);
+            }, 120);
+
+            setTimeout(() => {
+                verificationCard.innerHTML = '<p class="quick-note">sorry this website is not for you</p>';
+            }, 5000);
+        });
+
+        // Main Page Yes Button Action (Romantic Message + 5-sec Fireworks + Love Template Shower)
+        const mainFormContainer = document.getElementById('mainFormContainer');
+        const mainYesBtn = document.getElementById('mainYesBtn');
+        const fireworksContainer = document.getElementById('fireworksContainer');
+
+        mainYesBtn.addEventListener('click', () => {
+            mainYesBtn.disabled = true;
+            
+            // Show Custom Romantic Birthday Message
+            mainFormContainer.innerHTML = `
+                <h1 class="birthday-title">Happy Birthday, My Love! ❤️</h1>
+                <div class="birthday-paragraph">
+                    Happy Birthday to the most incredible woman in my world. Every single day with you feels like a gift, and today I celebrate the amazing person you are, the boundless love you bring into my life, and all the beautiful moments we share together.<br><br>
+                    Thank you for being my rock, my greatest joy, and my favorite adventure. I hope your day is filled with as much warmth, laughter, and happiness as you bring to everyone around you.<br><br>
+                    Here is to celebrating you today and always. I love you more than words can say! 🥂✨
+                </div>
+            `;
+
+            // 5-second ultimate fireworks loop
+            const startTime = Date.now();
+            const fireworkInterval = setInterval(() => {
+                if (Date.now() - startTime > 5000) {
+                    clearInterval(fireworkInterval);
+                    return;
+                }
+                triggerFireworkBurst();
+            }, 250);
+
+            // 5-second template of loves shower across the whole screen
+            const loveShowerInterval = setInterval(() => {
+                if (Date.now() - startTime > 5000) {
+                    clearInterval(loveShowerInterval);
+                    return;
+                }
+                triggerLoveParticle();
+            }, 100);
+        });
+
+        function triggerFireworkBurst() {
+            const x = Math.random() * 320 + 35;
+            const y = Math.random() * 500 + 100;
+            const colors = ['#ff2a85', '#ff69b4', '#ffffff', '#ffd700', '#ff1493', '#00ffff'];
+            const particleCount = 28;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('firework-particle');
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 110 + 30;
+                const tx = Math.cos(angle) * speed;
+                const ty = Math.sin(angle) * speed;
+
+                particle.style.setProperty('--tx', tx + 'px');
+                particle.style.setProperty('--ty', ty + 'px');
+
+                fireworksContainer.appendChild(particle);
+
+                setTimeout(() => {
+                    particle.remove();
+                }, 1000);
+            }
+        }
+
+        function triggerLoveParticle() {
+            const loveEl = document.createElement('div');
+            loveEl.classList.add('falling-emoji');
+            const loveEmojis = ['❤️', '💖', '💘', '💓', '💕', '💗'];
+            loveEl.textContent = loveEmojis[Math.floor(Math.random() * loveEmojis.length)];
+            loveEl.style.left = Math.random() * 95 + '%';
+            loveEl.style.fontSize = (Math.random() * 18 + 20) + 'px';
+            loveEl.style.animationDuration = (Math.random() * 1.5 + 2) + 's';
+            emojiShowerContainer.appendChild(loveEl);
+
+            setTimeout(() => {
+                loveEl.remove();
+            }, 3500);
+        }
+
+        // Main Card Interactive "No" Button Logic
+        const noBtn = document.getElementById('noBtn');
+
+        const turnIntoYes = () => {
+            noBtn.textContent = 'Yes';
+            noBtn.classList.remove('no-btn');
+            noBtn.classList.add('yes-btn');
+        };
+
+        const turnIntoNo = () => {
+            noBtn.textContent = 'No';
+            noBtn.classList.remove('yes-btn');
+            noBtn.classList.add('no-btn');
+        };
+
+        // Desktop mouse tracking
+        noBtn.addEventListener('mouseenter', turnIntoYes);
+        noBtn.addEventListener('mouseleave', turnIntoNo);
+
+        // Mobile touch tracking
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            turnIntoYes();
+        }, { passive: false });
+
+        noBtn.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            turnIntoNo();
+        }, { passive: false });
+    </script>
+
+</body>
+</html>
